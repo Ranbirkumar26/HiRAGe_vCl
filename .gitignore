@@ -1,0 +1,15 @@
+node_modules
+.next
+out
+.env
+.env.local
+*.tsbuildinfo
+.DS_Store
+
+# Supabase CLI local state
+supabase/.branches
+supabase/.temp
+
+# Internal working documents. Kept locally, deliberately not published.
+CLAUDE.md
+REPORT.md

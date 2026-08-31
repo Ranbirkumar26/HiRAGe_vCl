@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+/* Dark mode is driven by a class on <html> so the toggle in the shared UI can
+   override the operating system preference. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #ffffff;
+  --surface: #f4f8f7;
+  --surface-raised: #ffffff;
+  --border: #d7e3e2;
+  --border-strong: #b9cccb;
+  --foreground: #08110f;
+  --muted: #55676a;
+
+  --brand-blue: #10559a;
+  --brand-blue-soft: #e4eefa;
+  --brand-green: #0d7a5f;
+  --brand-green-soft: #dff2ea;
+
+  --primary: var(--brand-blue);
+  --primary-foreground: #ffffff;
+  --accent: var(--brand-green);
+  --accent-foreground: #ffffff;
+  --ring: #10559a;
+}
+
+.dark {
+  --background: #05100e;
+  --surface: #0b1a18;
+  --surface-raised: #102421;
+  --border: #1e3a35;
+  --border-strong: #2c534c;
+  --foreground: #eaf4f1;
+  --muted: #9ab3ae;
+
+  --brand-blue: #5aa9f0;
+  --brand-blue-soft: #10263c;
+  --brand-green: #46d6a5;
+  --brand-green-soft: #0c2c25;
+
+  --primary: var(--brand-blue);
+  --primary-foreground: #04121f;
+  --accent: var(--brand-green);
+  --accent-foreground: #04130f;
+  --ring: #5aa9f0;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-blue-soft: var(--brand-blue-soft);
+  --color-brand-green: var(--brand-green);
+  --color-brand-green-soft: var(--brand-green-soft);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
