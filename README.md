@@ -425,3 +425,30 @@ Each one earns its place:
   requests rather than 1,200.
 - The worker is a long lived process. It cannot run on Vercel or on any platform
   that terminates a process when an HTTP response is sent.
+
+## Deploying
+
+The web app runs on Vercel's free tier. Resume uploads go from the browser
+straight to Supabase Storage using a server-signed URL, so they are not subject
+to Vercel's 4.5 MB request cap or its function timeout, and pool size is not
+limited by the web tier.
+
+The worker still needs a host that allows a long lived process. Options, all
+free: run it on your own machine while demonstrating, run it on a schedule
+through GitHub Actions, or use an always-free VM. Without it the app works for
+browsing, sign up, applications and messages, but Parse and Shortlist stay
+queued.
+
+To deploy:
+
+1. Import the repository at https://vercel.com/new
+2. Add the environment variables from `.env.example`, using your hosted Supabase
+   values and your Gemini key.
+3. Set `NEXT_PUBLIC_SITE_URL` to the Vercel URL, not localhost.
+4. In Supabase, Authentication, URL Configuration: add
+   `https://your-app.vercel.app/auth/callback` to Redirect URLs, otherwise
+   confirmation links will not return to the deployed app.
+
+One caveat that remains: an uploaded job description file still travels through
+a Server Action, so on Vercel it must be under 4.5 MB. Typed and pasted
+descriptions are unaffected.

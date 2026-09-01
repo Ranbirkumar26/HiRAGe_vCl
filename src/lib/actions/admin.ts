@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { requireAdmin, requireSuperAdmin } from "../auth/session";
-import { MAX_POOL_SIZE, countPool, ingestResume } from "../ingest";
+import { MAX_POOL_SIZE, countPool } from "../ingest";
 import { parseDocument } from "../rag/parse";
 import { createAdminClient } from "../supabase/admin";
 import { SUPER_ADMIN_EMAIL } from "../types";
@@ -184,50 +184,6 @@ export async function deleteJobAction(formData: FormData): Promise<void> {
 
   revalidatePath("/admin");
   redirect("/admin");
-}
-
-export async function uploadResumesAction(
-  _prev: ActionState,
-  formData: FormData,
-): Promise<ActionState> {
-  await requireAdmin();
-  const jobId = String(formData.get("job_id") ?? "");
-  if (!jobId) return failure("Missing job.");
-
-  const files = formData
-    .getAll("resumes")
-    .filter((entry): entry is File => entry instanceof File && entry.size > 0);
-  if (!files.length) return failure("Choose at least one resume to upload.");
-
-  const db = createAdminClient();
-  const existing = await countPool(db, jobId);
-  if (existing + files.length > MAX_POOL_SIZE) {
-    return failure(
-      `This job already holds ${existing} resumes. The pool is capped at ${MAX_POOL_SIZE}.`,
-    );
-  }
-
-  let added = 0;
-  let duplicates = 0;
-  const failures: string[] = [];
-
-  for (const file of files) {
-    const result = await ingestResume(db, jobId, file, "admin_upload", null);
-    if (result.error) failures.push(`${result.fileName}: ${result.error}`);
-    else if (result.reused) duplicates++;
-    else added++;
-  }
-
-  revalidatePath(`/admin/jobs/${jobId}`);
-
-  const parts = [`${added} added`];
-  if (duplicates) parts.push(`${duplicates} already in the pool`);
-  if (failures.length) parts.push(`${failures.length} rejected`);
-
-  const summary = parts.join(", ") + ".";
-  return failures.length
-    ? failure(`${summary} ${failures.slice(0, 3).join(" ")}`)
-    : ok(summary);
 }
 
 async function enqueue(

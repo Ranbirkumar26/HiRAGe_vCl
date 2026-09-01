@@ -1,5 +1,6 @@
 import type {
   ButtonHTMLAttributes,
+  Ref,
   InputHTMLAttributes,
   ReactNode,
   SelectHTMLAttributes,
@@ -106,7 +107,7 @@ const CONTROL_CLASS =
 export function Input({
   className,
   ...props
-}: InputHTMLAttributes<HTMLInputElement>) {
+}: InputHTMLAttributes<HTMLInputElement> & { ref?: Ref<HTMLInputElement> }) {
   return <input className={cn(CONTROL_CLASS, className)} {...props} />;
 }
 
