@@ -13,3 +13,7 @@ supabase/.temp
 # Internal working documents. Kept locally, deliberately not published.
 CLAUDE.md
 REPORT.md
+.vercel
+.env*
+# The template is committed on purpose; it holds placeholders, never values.
+!.env.example
